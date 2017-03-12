@@ -3,3 +3,4 @@
  */
 
 export const GET_ALL_USERS_ACTION = 'getAllUsersAction'
+export const DELETE_USER_ACTION = 'deleteUserAction'

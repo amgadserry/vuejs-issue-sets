@@ -1,26 +1,28 @@
 <template lang="pug">
-  div.grid-item(  @mouseenter="setActions(true)",
-                  @mouseleave="setActions(false)")
-    transition( name="custom-classes-transition"
-                enter-active-class="animated fadeIn",
-                leave-active-class="animated fadeOut")
-      div.name(v-if="shouldShowActions")
-        span {{user.fullname()}}
+  div.grid-item(
+      v-loading.body="user.isBeingDeleted",
+      element-loading-text="Deleting...",
+      @click="toggleSelected")
     img(:src="user.image")
-    transition( name="custom-classes-transition"
-                enter-active-class="animated fadeIn",
-                leave-active-class="animated fadeOut")
-      div.actions(v-if="shouldShowActions")
-        i.fa.fa-pencil(aria-hidden="true")
-        i.fa.fa-trash(aria-hidden="true")
+    div.name {{user.fullname()}}
+    div.role Role
+    div.actions
+      i.fa.fa-pencil(aria-hidden="true", @click.stop="$refs.drawer.toggle()")
+      i.fa.fa-trash(aria-hidden="true", @click.stop="deleteUser")
+    div.checkmark(v-if="user.isSelected")
+      i.fa.fa-check
+    bm-drawer(:isOpened="false", ref="drawer")
+
 </template>
 
 <script>
   import User from '../../store/models/User.model'
+  import { DELETE_USER_ACTION } from '../../store/actionTypes'
+  import BmDrawer from '../../components/BmDrawer.vue'
   export default {
     data () {
       return {
-        shouldShowActions: false
+        isBeingEdited: false
       }
     },
     props: {
@@ -30,61 +32,91 @@
       }
     },
     methods: {
-      setActions (val) {
-        this.shouldShowActions = val
+      toggleSelected () {
+        this.user.isSelected = !this.user.isSelected
+      },
+      deleteUser () {
+        this.$confirm('Are you sure you want to delete ' + this.user.fullname() + ' ?',
+            'Warning', {
+              confirmButtonText: 'OK',
+              cancelButtonText: 'Cancel',
+              type: 'warning'
+            }).then(() => {
+              this.user.isBeingDeleted = true
+              this.$store.dispatch(DELETE_USER_ACTION, [this.user]).then(() => {
+                this.$message({
+                  type: 'success',
+                  message: this.user.fullname() + ' has been deleted'
+                })
+              })
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: 'Delete canceled'
+              })
+            })
       }
+    },
+    components: {
+      BmDrawer
     }
   }
 </script>
 
 <style scoped lang="scss">
   .grid-item{
-    position: relative;
-    border-radius: 4px;
     width: 200px;
-    height: 200px;
-    margin-bottom: 10px;
-    margin-right: 10px;
     overflow: hidden;
+    border: 1px solid #E2E9ED;
+    transition: all .3s ease;
+    background-color: white;
+    z-index:1;
     img{
-      height: 100%;
-      width: 100%;
-    }
-    .actions,.name{
-      position: absolute;
-      width: 100%;
-      font-size: 24px;
-      background-color: rgba(128, 128, 128, 0.74);
-      padding: 5px 0px;
-      color: white;
-      animation-duration: .5s;
+      border-radius: 100%;
+      width: 70px;
+      height: 70px;
+      margin-top: 20px;
     }
     .name{
-      border-top-left-radius: 4px;
-      border-top-right-radius: 4px;
+      color: #313435;
+      font-family: 'Roboto', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 500;
+      line-height: 2.625rem;
+    }
+    .role{
+      color: #6F808A;
+      font-family: 'Roboto', sans-serif;
+      font-size: 0.875rem;
+      line-height: 2.375rem;
     }
     .actions{
-      bottom: 0px;
       display: flex;
-      justify-content: space-between;
-      color: white;
-      border-bottom-left-radius: 4px;
-      border-bottom-right-radius: 4px;
+      width: 100px;
+      align-items: center;
+      justify-content: space-around;
+      margin: 0px auto;
+      font-size: 20px;
+      padding: 10px 0px;
+      opacity: 0;
+      transition: all .8s ease;
       i{
         cursor: pointer;
       }
-      i:first-child{
-        margin-left: 10px;
-      }
-      i:last-child{
-        margin-right: 10px;
-      }
     }
-    .name{
-      top: 0px;
+    .checkmark{
+      font-size: 25px;
+      position: absolute;
+      right: 10px;
+      top: 10px;
     }
   }
   .grid-item:hover{
-    box-shadow: 0px 0px 10px ;
+    transform: scale(1.1);
+    box-shadow: 0 8px 50px rgba(0, 0, 0, 0.2);
+    z-index:2;
+    .actions{
+      opacity: 1;
+    }
   }
 </style>
