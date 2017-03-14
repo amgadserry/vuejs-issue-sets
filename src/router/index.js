@@ -5,6 +5,7 @@ import AdminPanel from '@/layouts/AdminPanel.vue'
 import TeamManagmentLayout from '@/layouts/TeamManagementLayout.vue'
 import Page404 from '@/pages/404.vue'
 import Grid from '@/pages/Team-Grid/Grid.vue'
+import Graph from '@/pages/Team-Graph/Graph.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -28,6 +29,11 @@ export default new Router({
               path: 'grid',
               name: 'Grid',
               component: Grid
+            },
+            {
+              path: 'graph',
+              name: 'Graph',
+              component: Graph
             }
           ]
         }

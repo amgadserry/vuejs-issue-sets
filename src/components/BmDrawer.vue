@@ -49,6 +49,9 @@
     background: white;
     box-shadow: 0px 0px 5px gray;
     z-index: 10001;
+    .content{
+      height: 100%;
+    }
   }
   .slide-enter, .slide-leave-to{
     right: -400px;

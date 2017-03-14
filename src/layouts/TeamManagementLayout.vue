@@ -2,7 +2,7 @@
   div.team-management-layout
     div.actions
       el-button-group
-        el-button
+        el-button(@click="() => this.$router.push({name: 'Hierarchy'})")
           i.fa.fa-sitemap(aria-hidden="true")
         el-button(@click="() => this.$router.push({name: 'Grid'})")
           i.fa.fa-th-large(aria-hidden="true")

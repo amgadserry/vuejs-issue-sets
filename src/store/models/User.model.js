@@ -3,7 +3,7 @@
  */
 import _ from 'lodash'
 export default class User {
-  static fields = ['firstName',
+  static requiredFields = ['firstName',
     'lastName',
     'phone',
     'email',
@@ -11,13 +11,12 @@ export default class User {
 
   constructor (data) {
     if (this.hasData(data)) {
-      for (let key in data) {
-        this[key] = data[key]
-      }
+      this.info = data
       this.initExtraFields()
     } else {
-      throw new Error('missing user data')
+      this.info = {}
     }
+    this.editInfo = _.cloneDeep(this.info)
   }
 
   initExtraFields () {
@@ -38,22 +37,26 @@ export default class User {
 
   hasData (data) {
     let isValid = true
-    User.fields.map((field) => isValid || _.has(data, field))
+    User.requiredFields.map((field) => isValid || _.has(data, field))
     return isValid
   }
 
   fullname () {
-    return this.firstName + ' ' + this.lastName
+    return this.info.firstName + ' ' + this.info.lastName
   }
 
   includes (filter) {
-    for (let key in this) {
-      if (key === 'image' || key === 'animationId' || key === 'isSelected') continue
-      if (this[key].includes(filter)) {
+    for (let key in this.info) {
+      if (key === 'image') continue
+      if (this.info[key].includes(filter)) {
         return true
       }
     }
     return false
+  }
+
+  save () {
+    this.info = _.cloneDeep(this.editInfo)
   }
 
 }

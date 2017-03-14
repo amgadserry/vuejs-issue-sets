@@ -3,7 +3,7 @@
       v-loading.body="user.isBeingDeleted",
       element-loading-text="Deleting...",
       @click="toggleSelected")
-    img(:src="user.image")
+    img(:src="user.info.image")
     div.name {{user.fullname()}}
     div.role Role
     div.actions
@@ -12,13 +12,14 @@
     div.checkmark(v-if="user.isSelected")
       i.fa.fa-check
     bm-drawer(:isOpened="false", ref="drawer")
-
+      bm-user-form(:user="user")
 </template>
 
 <script>
   import User from '../../store/models/User.model'
   import { DELETE_USER_ACTION } from '../../store/actionTypes'
   import BmDrawer from '../../components/BmDrawer.vue'
+  import BmUserForm from '../../components/BmUserForm.vue'
   export default {
     data () {
       return {
@@ -58,7 +59,8 @@
       }
     },
     components: {
-      BmDrawer
+      BmDrawer,
+      BmUserForm
     }
   }
 </script>
@@ -71,6 +73,7 @@
     transition: all .3s ease;
     background-color: white;
     z-index:1;
+    position: relative;
     img{
       border-radius: 100%;
       width: 70px;
