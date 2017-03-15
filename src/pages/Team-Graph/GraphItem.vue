@@ -1,17 +1,15 @@
 <template lang="pug">
-  svg(class="node")
-    line(:style="{ opacity: employee.opacity }", v-for="employee in data.employees", :x1="0", :y1="0", :x2="employee.x", :y2="employee.y", stroke="gray")
-    g
-      circle(:style="{ opacity: opacity }", :r="radius")
-      text(:style="{ opacity: opacity }", dy="0em", :textLength="1.5 * radius",fill="white", lengthAdjust="spacingAndGlyphs") {{data.name}}
-      text(:style="{ opacity: opacity }", dy="1.2em", :textLength=".5 * radius",fill="white", lengthAdjust="spacingAndGlyphs") {{data.role}}
+  svg(class="node", :x="data.x", :y="data.y")
+    line(:style="{display: childDisplay}", v-for="employee in data.employees", :x1="0", :y1="0", :x2="employee.x", :y2="employee.y", stroke="gray")
+    g(@mousedown="selectSubtreeAsParent", :style="{display}")
+      circle(:r="radius")
+      text( dy="0em", :textLength="1.5 * radius",fill="white", lengthAdjust="spacingAndGlyphs") {{data.name}}
+      text( dy="1.2em", :textLength=".5 * radius",fill="white", lengthAdjust="spacingAndGlyphs") {{data.role}}
     graph-item(
         v-for="employee in data.employees",
         :data="employee",
         :x="employee.x",
-        :y="employee.y",
-        :radius="employee.r",
-        :level="level + 1")
+        :y="employee.y")
 </template>
 
 <script>
@@ -20,6 +18,7 @@
     name: 'graph-item',
     data () {
       return {
+        opacity: 0
       }
     },
     props: {
@@ -27,46 +26,63 @@
       isMain: {
         type: Boolean,
         default: false
-      },
-      radius: {
-        type: Number,
-        default: 5
-      },
-      level: {
-        type: Number,
-        default: 1
       }
     },
     components: {
       GraphItem
     },
     created () {
-      this.setupChildrenLocation()
+      this.setupChildrenLocation(this.radius)
+      this.setupLocation()
     },
-    watch: {
-      radius (newVal) {
-        this.setupChildrenLocation()
-      }
+    updated () {
+      this.setupChildrenLocation(this.radius)
+      this.setupLocation()
     },
     methods: {
-      setupChildrenLocation () {
+      setupChildrenLocation (radius) {
         let length = this.data.employees.length
         if (length === 0) return
         let angle = (Math.PI * 2) / length
-        let childRadius = this.radius / 1.3
-        let r = (this.radius + childRadius) * 2
         for (let i = 0; i < length; i++) {
-          let y = r * Math.sin(angle * i)
-          let x = r * Math.cos(angle * i)
-          this.data.employees[i].x = x
-          this.data.employees[i].y = y
-          this.data.employees[i].r = childRadius
+          this.data.employees[i].angle = angle * i
+          this.data.employees[i].level = this.data.level + 1
+        }
+      },
+      selectSubtreeAsParent () {
+        this.$store.commit('setCurrentTree', this.data)
+      },
+      setupLocation () {
+        console.log(this.isMain)
+        if (this.levelDiff === 0) {
+          this.data.x = '50%'
+          this.data.y = '50%'
+        } else {
+          let r = ((this.radius * 2) + 30) + ((2 - this.levelDiff) * 100)
+          let y = r * Math.sin(this.data.angle)
+          let x = r * Math.cos(this.data.angle)
+          this.data.x = x
+          this.data.y = y
         }
       }
     },
     computed: {
-      opacity () {
-        return 1 - (Math.abs(this.radius - 50) / 50)
+      display () {
+        return this.levelDiff >= 0 && this.levelDiff <= 2 ? 'block' : 'none'
+      },
+      childDisplay () {
+        return this.levelDiff >= 0 && this.levelDiff <= 1 ? 'block' : 'none'
+      },
+      radius () {
+        if (this.levelDiff > 2) return 0
+        return (3 - this.levelDiff) * 30
+      },
+      childRadius () {
+        if (this.levelDiff > 2) return 0
+        return (2 - this.levelDiff) * 30
+      },
+      levelDiff () {
+        return (this.data.level - this.$store.state.Graph.currentlySelectedLevel)
       }
     }
   }

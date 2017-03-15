@@ -1,5 +1,5 @@
 <template lang="pug">
-  p oops you have enter a none existing page
+  p oops you have entered a none existing page
 </template>
 
 <script>
