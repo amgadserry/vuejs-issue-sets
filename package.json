@@ -19,6 +19,7 @@
     "font-awesome": "^4.7.0",
     "lodash": "^4.17.4",
     "pug": "^2.0.0-beta11",
+    "tween.js": "^16.6.0",
     "velocity-animate": "^1.4.3",
     "vue": "^2.2.1",
     "vue-router": "^2.2.0",

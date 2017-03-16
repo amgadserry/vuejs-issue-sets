@@ -5,7 +5,7 @@ import AdminPanel from '@/layouts/AdminPanel.vue'
 import TeamManagmentLayout from '@/layouts/TeamManagementLayout.vue'
 import Page404 from '@/pages/404.vue'
 import Grid from '@/pages/Team-Grid/Grid.vue'
-import Hierarchy from '@/pages/Team-hierarchy/Hierarchy'
+import Graph from '@/pages/Team-Graph/Graph.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -31,9 +31,9 @@ export default new Router({
               component: Grid
             },
             {
-              path: 'hierarchy',
-              name: 'Hierarchy',
-              component: Hierarchy
+              path: 'graph',
+              name: 'Graph',
+              component: Graph
             }
           ]
         }

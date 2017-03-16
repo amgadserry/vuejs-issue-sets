@@ -4,7 +4,10 @@
         @mousedown="setCanMove(true, $event)",
         @mouseup="setCanMove(false, $event)",
         @mousemove="move",
-        :viewBox="location.x + ' ' + location.y + ' 1000 800'",
+        width="100%",
+        height="100%",
+        viewBox="0 0 1000 1000",
+        preserveAspectRatio='xMaxYMax',
         xmlns="http://www.w3.org/2000/svg",
         xmlns:xlink="http://www.w3.org/1999/xlink")
       graph-item(:data="$store.state.Graph.currentTree", :isMain="true")
