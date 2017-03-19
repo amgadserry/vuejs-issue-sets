@@ -1,7 +1,11 @@
 <template lang="pug">
   div.image-picker
     input(type="file", ref="imgInput", @change="imageSelected")
-    img(:src="imageData || image", @click="handleClick")
+    img(v-if="imageData || image",
+        :src="imageData || image",
+        @click="handleClick")
+    div.add-image(v-else, @click="handleClick")
+      i.fa.fa-plus
 </template>
 
 <script>
@@ -42,11 +46,21 @@
     input{
       display: none;
     }
-    img{
+    img, .add-image{
       width: 150px;
       height: 150px;
       margin-bottom: 20px;
       border-radius: 50%;
+      cursor: pointer;
+    }
+    .add-image{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 1px solid #E2E9ED;
+      i {
+        font-size: 50px;
+      }
     }
   }
 </style>

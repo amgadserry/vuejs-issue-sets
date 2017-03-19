@@ -8,7 +8,8 @@ import User from '../models/User.model'
 export default {
   state: {
     loggedUser: {},
-    users: []
+    users: [],
+    isInitialized: false
   },
   getters: {
     filteredUsers: (state, getters) => (key) => {
@@ -18,7 +19,7 @@ export default {
     },
     selectedUsers: (state, getters) => () => {
       return state.users.filter((user) => {
-        return user.isSelected
+        return user.grid.isSelected
       })
     }
   },
@@ -26,6 +27,7 @@ export default {
     [mutations.SET_USERS_MUTATION] (state, users) {
       let _users = users.map((user) => new User(user))
       state.users = _users
+      state.isInitialized = true
     },
     [mutations.REMOVE_USER_MUTATION] (state, users) {
       users.map((user) => {
@@ -35,7 +37,7 @@ export default {
   },
   actions: {
     async [actions.GET_ALL_USERS_ACTION] ({commit}) {
-      let users = await Api.FindAll()
+      let users = await Api.findAll()
       commit(mutations.SET_USERS_MUTATION, users)
       return await users
     },

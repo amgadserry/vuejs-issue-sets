@@ -3,7 +3,7 @@
  */
 
 export default class User {
-  static FindAll () {
+  static findAll () {
     return new Promise((resolve) => {
       setTimeout(() => resolve([
         {
@@ -12,7 +12,9 @@ export default class User {
           lastName: 'House',
           phone: '010100000',
           email: 'x.x@hotmail.com',
-          image: 'https://s-media-cache-ak0.pinimg.com/originals/da/63/86/da6386ea022e254dbed22c9ff5495b2a.jpg'
+          image: 'https://s-media-cache-ak0.pinimg.com/originals/da/63/86/da6386ea022e254dbed22c9ff5495b2a.jpg',
+          managers_ids: [],
+          employees_ids: ['2', '3', '4']
         },
         {
           id: '2',
@@ -20,7 +22,9 @@ export default class User {
           lastName: 'face',
           phone: '010100000',
           email: 'y.y@hotmail.com',
-          image: 'http://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/durchschnittsgesichter/m(01-32)_gr.jpg'
+          image: 'http://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/durchschnittsgesichter/m(01-32)_gr.jpg',
+          managers_ids: ['1'],
+          employees_ids: ['5']
         },
         {
           id: '3',
@@ -28,7 +32,9 @@ export default class User {
           lastName: 'white',
           phone: '010100000',
           email: 'z.z@hotmail.com',
-          image: 'http://dreamicus.com/data/face/face-01.jpg'
+          image: 'http://dreamicus.com/data/face/face-01.jpg',
+          managers_ids: ['1'],
+          employees_ids: []
         },
         {
           id: '4',
@@ -36,39 +42,19 @@ export default class User {
           lastName: 'House',
           phone: '010100000',
           email: 'x.x@hotmail.com',
-          image: 'https://s-media-cache-ak0.pinimg.com/originals/da/63/86/da6386ea022e254dbed22c9ff5495b2a.jpg'
+          image: 'https://s-media-cache-ak0.pinimg.com/originals/da/63/86/da6386ea022e254dbed22c9ff5495b2a.jpg',
+          managers_ids: ['1'],
+          employees_ids: []
         },
         {
           id: '5',
-          firstName: 'palm',
-          lastName: 'face',
-          phone: '010100000',
-          email: 'y.y@hotmail.com',
-          image: 'http://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/durchschnittsgesichter/m(01-32)_gr.jpg'
-        },
-        {
-          id: '6',
-          firstName: 'whity',
-          lastName: 'white',
-          phone: '010100000',
-          email: 'z.z@hotmail.com',
-          image: 'http://dreamicus.com/data/face/face-01.jpg'
-        },
-        {
-          id: '7',
           firstName: 'Dr',
           lastName: 'House',
           phone: '010100000',
           email: 'x.x@hotmail.com',
-          image: 'https://s-media-cache-ak0.pinimg.com/originals/da/63/86/da6386ea022e254dbed22c9ff5495b2a.jpg'
-        },
-        {
-          id: '8',
-          firstName: 'palm',
-          lastName: 'face',
-          phone: '010100000',
-          email: 'y.y@hotmail.com',
-          image: 'http://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/durchschnittsgesichter/m(01-32)_gr.jpg'
+          image: 'https://s-media-cache-ak0.pinimg.com/originals/da/63/86/da6386ea022e254dbed22c9ff5495b2a.jpg',
+          managers_ids: ['2'],
+          employees_ids: []
         }
       ]), 1000)
     })

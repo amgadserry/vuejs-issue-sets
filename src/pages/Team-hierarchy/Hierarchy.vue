@@ -1,6 +1,13 @@
 <template lang="pug">
-  div.bm-hierarchy
-    hierarchy-item(:data="data[0]")
+  div.bm-graph
+    svg(
+      width="100%",
+      height="100%",
+      viewBox="0 0 1000 1000",
+      preserveAspectRatio='xMaxYMax',
+      xmlns="http://www.w3.org/2000/svg",
+      xmlns:xlink="http://www.w3.org/1999/xlink")
+      hierarchy-item(:data="$store.state.Hierarchy.currentTree", :isMain="true")
 </template>
 
 <script>
@@ -8,58 +15,16 @@
   export default {
     components: {
       HierarchyItem
-    },
-    data () {
-      return {
-        data: [{
-          name: 'Amgad Serry',
-          role: 'Role',
-          image: 'https://s-media-cache-ak0.pinimg.com/originals/da/63/86/da6386ea022e254dbed22c9ff5495b2a.jpg',
-          employees: [
-            {
-              name: 'some one',
-              role: 'Role',
-              image: 'https://s-media-cache-ak0.pinimg.com/originals/da/63/86/da6386ea022e254dbed22c9ff5495b2a.jpg',
-              employees: []
-            },
-            {
-              name: 'some one2',
-              role: 'Role',
-              image: 'https://s-media-cache-ak0.pinimg.com/originals/da/63/86/da6386ea022e254dbed22c9ff5495b2a.jpg',
-              employees: []
-            },
-            {
-              name: 'some one2',
-              role: 'Role',
-              image: 'https://s-media-cache-ak0.pinimg.com/originals/da/63/86/da6386ea022e254dbed22c9ff5495b2a.jpg',
-              employees: []
-            }
-          ]
-        },
-        {
-          name: 'Amgad Serry',
-          role: 'Role',
-          employees: [
-            {
-              name: 'some one',
-              role: 'Role',
-              employees: []
-            },
-            {
-              name: 'some one',
-              role: 'Role',
-              employees: []
-            }
-          ]
-        }]
-      }
     }
   }
 </script>
 
 <style scoped lang="scss">
-  .bm-hierarchy{
-    display: flex;
-    padding: 20px;
+  .bm-graph{
+    width: 100%;
+    height: 100%;
+    svg svg{
+      overflow: visible;
+    }
   }
 </style>

@@ -3,29 +3,43 @@
  */
 import _ from 'lodash'
 export default class User {
-  static requiredFields = ['firstName',
+  static requiredFields = [
+    'id',
+    'firstName',
     'lastName',
     'phone',
     'email',
-    'image']
+    'image',
+    'managers_ids',
+    'employees_ids']
 
   constructor (data) {
-    if (this.hasData(data)) {
+    if (this._hasData(data)) {
       this.info = data
-      this.initExtraFields()
+      this.newUser = false
     } else {
       this.info = {}
+      User.requiredFields.map((field) => { this.info[field] = undefined })
+      this.newUser = true
     }
+    this._initExtraFields()
     this.editInfo = _.cloneDeep(this.info)
   }
 
-  initExtraFields () {
-    this.createAnimationId()
-    this.isSelected = false
-    this.isBeingDeleted = false
+  _initExtraFields () {
+    this.managers = []
+    this.employees = []
+    this._createAnimationId()
+    this._initGridData()
   }
 
-  createAnimationId () {
+  _initGridData () {
+    this.grid = {}
+    this.grid.isSelected = false
+    this.grid.isBeingDeleted = false
+  }
+
+  _createAnimationId () {
     let timeStamp = Math.floor(Date.now() / 1000)
     var text = ''
     var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -35,10 +49,10 @@ export default class User {
     this.animationId = text + timeStamp
   }
 
-  hasData (data) {
-    let isValid = true
-    User.requiredFields.map((field) => isValid || _.has(data, field))
-    return isValid
+  _hasData (data) {
+    if (Object.keys(data).length === 0) return false
+    return User.requiredFields.reduce(
+      (isValid, field) => isValid && _.has(data, field), true)
   }
 
   fullname () {

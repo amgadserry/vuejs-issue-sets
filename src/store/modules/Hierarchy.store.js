@@ -1,7 +1,6 @@
 /**
  * Created by amgadserry on 09/03/17.
  */
-import _ from 'lodash'
 export default {
   state: {
     location: {
@@ -361,16 +360,6 @@ export default {
     }
   },
   mutations: {
-    setLocation (state, location) {
-      state.location = location
-    },
-    setCurrentTree (state, currentTree) {
-      state.currentlySelectedLevel = currentTree.level
-      setTimeout(() => { state.currentTree = _.cloneDeep(currentTree) }, 0)
-    },
-    setCurrentSelectedLevel (state, level) {
-      state.currentlySelectedLevel = level
-    },
     setSelected (state, data) {
       while (state.selectedNodes.length > data.level) {
         state.selectedNodes.pop()

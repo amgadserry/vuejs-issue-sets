@@ -4,13 +4,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import User from './modules/User.store'
-import Graph from './modules/Graph.store'
+import Hierarchy from './modules/Hierarchy.store'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   modules: {
     User,
-    Graph
+    Hierarchy
   }
 })
 

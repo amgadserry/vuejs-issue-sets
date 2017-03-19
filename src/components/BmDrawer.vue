@@ -1,5 +1,5 @@
 <template lang="pug">
-  div
+  div(:v-if="isOpened")
     transition(name="slide")
       div.bm-drawer(v-if="opened")
         div.content

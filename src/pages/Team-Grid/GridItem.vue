@@ -1,18 +1,21 @@
 <template lang="pug">
   div.grid-item(
-      v-loading.body="user.isBeingDeleted",
+      v-loading.body="user.grid.isBeingDeleted",
       element-loading-text="Deleting...",
       @click="toggleSelected")
     img(:src="user.info.image")
     div.name {{user.fullname()}}
     div.role Role
     div.actions
-      i.fa.fa-pencil(aria-hidden="true", @click.stop="$refs.drawer.toggle()")
+      i.fa.fa-pencil(aria-hidden="true", @click.stop="$refs.editUserDrawer.toggle()")
       i.fa.fa-trash(aria-hidden="true", @click.stop="deleteUser")
-    div.checkmark(v-if="user.isSelected")
+      i.fa.fa-sitemap(aria-hidden="true", @click.stop="$refs.relationsDrawer.toggle()")
+    div.checkmark(v-if="user.grid.isSelected")
       i.fa.fa-check
-    bm-drawer(:isOpened="false", ref="drawer")
+    bm-drawer(:isOpened="false", ref="editUserDrawer")
       bm-user-form(:user="user")
+    bm-drawer(:isOpened="false", ref="relationsDrawer")
+      bm-user-relations-form
 </template>
 
 <script>
@@ -20,10 +23,10 @@
   import { DELETE_USER_ACTION } from '../../store/actionTypes'
   import BmDrawer from '../../components/BmDrawer.vue'
   import BmUserForm from '../../components/BmUserForm.vue'
+  import BmUserRelationsForm from '../../components/BmUserRelationsForm.vue'
   export default {
     data () {
       return {
-        isBeingEdited: false
       }
     },
     props: {
@@ -34,7 +37,7 @@
     },
     methods: {
       toggleSelected () {
-        this.user.isSelected = !this.user.isSelected
+        this.user.grid.isSelected = !this.user.grid.isSelected
       },
       deleteUser () {
         this.$confirm('Are you sure you want to delete ' + this.user.fullname() + ' ?',
@@ -43,7 +46,7 @@
               cancelButtonText: 'Cancel',
               type: 'warning'
             }).then(() => {
-              this.user.isBeingDeleted = true
+              this.user.grid.isBeingDeleted = true
               this.$store.dispatch(DELETE_USER_ACTION, [this.user]).then(() => {
                 this.$message({
                   type: 'success',
@@ -57,10 +60,12 @@
               })
             })
       }
+
     },
     components: {
       BmDrawer,
-      BmUserForm
+      BmUserForm,
+      BmUserRelationsForm
     }
   }
 </script>
@@ -68,6 +73,7 @@
 <style scoped lang="scss">
   .grid-item{
     width: 200px;
+    height: 210px;
     overflow: hidden;
     border: 1px solid #E2E9ED;
     transition: all .3s ease;

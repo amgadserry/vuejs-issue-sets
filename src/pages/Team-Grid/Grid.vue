@@ -1,5 +1,5 @@
 <template lang="pug">
-  div.team-grid(v-loading.fullscreen="users.length === 0")
+  div.team-grid(v-loading.fullscreen="!this.$store.state.User.isInitialized")
     div.grid-filters
       el-input(
         icon="search",
@@ -9,12 +9,14 @@
       div.grid-filters(v-if="selectedUsers && selectedUsers().length > 0")
         i.fa.fa-trash(aria-hidden="true", @click="deleteSelectedUsers")
     transition-group.grid(name="grid", tag="div")
+      add-grid-item(key="addUserGridItem")
       grid-item(:user="user",:key="user.animationId", v-for="(user, idx) in filteredUsers(filter)")
 </template>
 
 <script>
   import {GET_ALL_USERS_ACTION, DELETE_USER_ACTION} from '../../store/actionTypes'
   import GridItem from './GridItem.vue'
+  import AddGridItem from './AddGridItem.vue'
   import {mapGetters} from 'vuex'
   export default {
     created () {
@@ -34,7 +36,8 @@
       ...mapGetters(['filteredUsers', 'selectedUsers'])
     },
     components: {
-      GridItem
+      GridItem,
+      AddGridItem
     },
     methods: {
       deleteSelectedUsers () {
@@ -45,7 +48,7 @@
             cancelButtonText: 'Cancel',
             type: 'warning'
           }).then(() => {
-            this.selectedUsers().map((user) => { user.isBeingDeleted = true })
+            this.selectedUsers().map((user) => { user.grid.isBeingDeleted = true })
             this.$store.dispatch(DELETE_USER_ACTION, this.selectedUsers()).then(() => {
               this.$message({
                 type: 'success',
