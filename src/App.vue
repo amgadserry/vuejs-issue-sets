@@ -1,6 +1,6 @@
 <template lang="pug">
   div
-    div.test-block(@click="toggleSelected") {{isSelected}}
+    div.test-block(@click="toggleSelected") {{user.isSelected}}
 </template>
 
 <script>
@@ -16,11 +16,6 @@
     methods: {
       toggleSelected () {
         this.$store.commit('toggleSelected', this.user)
-      }
-    },
-    computed: {
-      isSelected () {
-        return this.$store.state.User.selectedUsers.has(this.user)
       }
     }
   }
