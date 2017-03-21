@@ -1,34 +1,35 @@
-<template>
-  <div id="app" :style="{ backgroundColor: bgColor}">
-    <transition name="custom-classes-transition"
-                enter-active-class="animated fadeIn">
-      <router-view></router-view>
-    </transition>
-  </div>
+<template lang="pug">
+  div
+    div.test-block(@click="toggleSelected") {{isSelected}}
 </template>
 
 <script>
-export default {
-  name: 'app',
-  computed: {
-    bgColor () {
-      return this.$route.name.toLowerCase() === 'login' ? '#bdbdbd' : 'white'
+  export default {
+    data () {
+      return {
+        user: undefined
+      }
+    },
+    created () {
+      this.user = this.$store.state.User.users[0]
+    },
+    methods: {
+      toggleSelected () {
+        this.$store.commit('toggleSelected', this.user)
+      }
+    },
+    computed: {
+      isSelected () {
+        return this.$store.state.User.selectedUsers.has(this.user)
+      }
     }
   }
-}
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  min-height: 100%;
-  min-width: 100%;
-  width: 100%;
-  height: 100%;
-
-}
+<style scoped lang="scss">
+  .test-block{
+    width: 100px;
+    height: 100px;
+    background-color: #7f7f7f;
+  }
 </style>
